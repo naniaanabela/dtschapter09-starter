@@ -66,11 +66,43 @@ public class ProfileActivity extends AppCompatActivity
 
     public void onBtnSave_Click(View view)
     {
+        // Memperbarui data di propery currentUser sehingga sesuai dengan nilai-nilai terakhir yang dientrykan oleh pengguna
+        this.syncData();
+
+        // Mendapatkan class DAO dari DTSAppDatabase
+        UserDao daoUser = AppDbProvider.getInstance(this).userDao();
+
+        // Menggunakan DAO untuk menyimpan data user saat ini yang sudah tersedia di property currentUser.
+        daoUser.update(this.currentUser);
+
         Toast.makeText(this, "Your data has been updated!", Toast.LENGTH_SHORT).show();
     }
 
     public void onTxvDeleteAccount_Click(View view)
     {
+        // Memperbarui data di propertu currentUser
+        this.syncData();
+
+        // Mendapatkan class DAO dari DTSAppDatabase
+        UserDao daoUser = AppDbProvider.getInstance(this).userDao();
+
+        // Menggunakan DAO untuk menghapus data di database yang sama dengan data yang ada di property currentUser
+        daoUser.delete(this.currentUser);
+
         Toast.makeText(this, "Your data has been deleted..", Toast.LENGTH_SHORT).show();
+
+        // Kembali ke halaman login
+        Intent intent = new Intent(getApplicationContext(), WelcomeBackActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Lompati halaman sebelumnya
+        startActivity(intent);
+    }
+
+
+    // Menangkap data dari semua EditText dan menyalinnya ke Entity currentUser
+    private void syncData()
+    {
+        this.currentUser.password = this.edtPassword.getText().toString();
+        this.currentUser.email = this.edtEmail.getText().toString();
+        this.currentUser.phoneNumber = this.edtPhoneNumber.getText().toString();
     }
 }
