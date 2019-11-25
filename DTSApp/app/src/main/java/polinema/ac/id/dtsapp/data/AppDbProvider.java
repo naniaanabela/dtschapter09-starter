@@ -7,6 +7,7 @@ public class AppDbProvider
 {
     private static DTSAppDatabase instance;
 
+
     public static DTSAppDatabase getInstance(Context context)
     {
         if(AppDbProvider.instance == null)
@@ -17,4 +18,20 @@ public class AppDbProvider
 
         return AppDbProvider.instance;
     }
+
+    private static DTSAppDatabase asynchronousInstance;
+
+    public static DTSAppDatabase getAsynchronousInstance(Context context)
+    {
+        if(AppDbProvider.asynchronousInstance == null)
+        {
+            AppDbProvider.asynchronousInstance = Room.databaseBuilder(
+                    context, DTSAppDatabase.class, "dtsapp.db").build();
+        }
+
+        return AppDbProvider.asynchronousInstance;
+    }
+
+
+
 }
